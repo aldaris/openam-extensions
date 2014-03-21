@@ -31,7 +31,7 @@
     <repositories>
         <repository>
             <id>forgerock</id>
-            <url>http://maven.forgerock.org/repo/openam-snapshots</url>
+            <url>http://maven.forgerock.org/repo/releases</url>
         </repository>
     </repositories>
 
