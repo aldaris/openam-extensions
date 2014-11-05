@@ -12,29 +12,48 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014 ForgeRock AS.
---%>
-<%@ page pageEncoding="UTF-8" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+--%><%@ page pageEncoding="UTF-8" import="com.iplanet.am.util.SystemProperties,
+             com.sun.identity.shared.Constants" %><!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <title>OpenAM Consent</title>
-        <link rel="stylesheet" type="text/css" href="com_sun_web_ui/css/css_ns6up.css" />
-        <link rel="shortcut icon" href="com_sun_web_ui/images/favicon/favicon.ico" type="image/x-icon" />
+        <%
+            String contextPath = SystemProperties.get(Constants.AM_SERVICES_DEPLOYMENT_DESCRIPTOR);
+        %>
+        <title>User Consent</title>
+        <link rel="stylesheet/less" type="text/css" href="<%= contextPath %>/XUI/css/styles.less" />
+        <script language="javascript" type="text/javascript" src="<%= contextPath %>/XUI/libs/less-1.5.1-min.js"></script>
+        <script language="javascript" type="text/javascript">
+            less.modifyVars({
+                "@background-image": "url('../images/box-bg.png')",
+                "@background-position": "950px -100px",
+                "@footer-background-color": "rgba(238, 238, 238, 0.7)",
+                "@content-background": "#f9f9f9"
+            });
+        </script>
     </head>
-    <body class="DefBdy">
-        <div class="SkpMedGry1"><a href="#SkipAnchor3860"><img src="com_sun_web_ui/images/other/dot.gif" alt="Jump to End of Masthead" border="0" height="1" width="1" /></a></div><div class="MstDiv">
-            <table class="MstTblBot" title="" border="0" cellpadding="0" cellspacing="0" width="100%">
-                <tr>
-                    <td class="MstTdTtl" width="99%">
-                        <div class="MstDivTtl"><img name="AMConfig.configurator.ProdName" src="console/images/PrimaryProductName.png" alt="OpenAM" border="0" /></div>
-                    </td>
-                    <td class="MstTdLogo" width="1%"><img name="AMConfig.configurator.BrandLogo" src="com_sun_web_ui/images/other/javalogo.gif" alt="Java(TM) Logo" border="0" height="55" width="31" /></td>
-                </tr>
-            </table>
-            <table class="MstTblEnd" border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td><img name="RMRealm.mhCommon.EndorserLogo" src="com_sun_web_ui/images/masthead/masthead-sunname.gif" alt="ForgeRock AS" align="right" border="0" height="10" width="108" /></td></tr></table>
+    <body>
+        <div id="wrapper">
+            <div id="login-base" class="base-wrapper">
+                <div id="header">
+                    <div id="logo" class="float-left">
+                        <a href="" title="ForgeRock"><img src="<%= contextPath %>/XUI/images/logo.png" alt="ForgeRock" style="height: 80px" /></a>
+                    </div>
+                </div>
+                <div id="content" class="content">
+                    <div class="container-shadow" id="login-container">
+                        <h5>Nothing to see here.</h5>
+                    </div>
+                </div>
+            </div>
         </div>
-        <table class="SkpMedGry1" border="0" cellpadding="5" cellspacing="0" width="100%"><tr><td><img src="com_sun_web_ui/images/other/dot.gif" alt="Jump to End of Masthead" border="0" height="1" width="1" /></td></tr></table>
-        <table border="0" cellpadding="10" cellspacing="0" width="100%"><tr><td></td></tr></table>
-        Nothing to see here.
+        <div id="footer">
+            <div class="container center">
+                <p class="center">
+                    <a href="mailto: info@forgerock.com">info@forgerock.com</a>
+                    <br>
+                    Copyright © 2010-14 ForgeRock AS, all rights reserved.
+                </p>
+            </div>
+        </div>
     </body>
 </html>

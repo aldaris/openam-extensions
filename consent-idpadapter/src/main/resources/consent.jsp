@@ -12,27 +12,24 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014 ForgeRock AS.
---%>
-
-<%@ page pageEncoding="UTF-8" %>
-<%@ page import="java.security.AccessController,
-         java.util.List,
-         java.util.Map,
-         java.util.HashMap,
-         java.util.Set,
-         com.iplanet.sso.SSOToken,
-         com.iplanet.sso.SSOTokenManager,
-         com.sun.identity.idm.AMIdentity,
-         com.sun.identity.idm.IdUtils,
-         com.sun.identity.saml2.assertion.Attribute,
-         com.sun.identity.saml2.profile.ConsentHelper,
-         com.iplanet.am.util.SystemProperties,
-         com.sun.identity.shared.encode.Base64,
-         com.sun.identity.shared.Constants,
-         com.iplanet.sso.SSOToken"
-         %>
-<%
-    String serviceURI = SystemProperties.get(Constants.AM_SERVICES_DEPLOYMENT_DESCRIPTOR);
+--%><%@ page pageEncoding="UTF-8" import="java.security.AccessController,
+             java.util.List,
+             java.util.Map,
+             java.util.HashMap,
+             java.util.Set,
+             com.iplanet.sso.SSOToken,
+             com.iplanet.sso.SSOTokenManager,
+             com.sun.identity.idm.AMIdentity,
+             com.sun.identity.idm.IdUtils,
+             com.sun.identity.saml2.assertion.Attribute,
+             com.sun.identity.saml2.profile.ConsentHelper,
+             com.iplanet.am.util.SystemProperties,
+             com.sun.identity.shared.encode.Base64,
+             com.sun.identity.shared.Constants,
+             com.iplanet.sso.SSOToken,
+             org.forgerock.openam.utils.CollectionUtils"
+%><%
+    String contextPath = SystemProperties.get(Constants.AM_SERVICES_DEPLOYMENT_DESCRIPTOR);
 
     String answer = request.getParameter("submit");
     if (answer != null) {
@@ -54,56 +51,76 @@
             }
             return;
         } else {
-            response.sendRedirect(serviceURI + "/consentDeny.jsp");
+            response.sendRedirect(contextPath + "/consentDeny.jsp");
             return;
         }
     }
-%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+%><!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <title>OpenAM Consent</title>
-        <link rel="stylesheet" type="text/css" href="<%= serviceURI%>/com_sun_web_ui/css/css_ns6up.css" />
-        <link rel="shortcut icon" href="<%= serviceURI%>/com_sun_web_ui/images/favicon/favicon.ico" type="image/x-icon" />
+        <title>User Consent</title>
+        <link rel="stylesheet/less" type="text/css" href="<%= contextPath %>/XUI/css/styles.less" />
+        <script language="javascript" type="text/javascript" src="<%= contextPath %>/XUI/libs/less-1.5.1-min.js"></script>
+        <script language="javascript" type="text/javascript">
+            less.modifyVars({
+                "@background-image": "url('../images/box-bg.png')",
+                "@background-position": "950px -100px",
+                "@footer-background-color": "rgba(238, 238, 238, 0.7)",
+                "@content-background": "#f9f9f9"
+            });
+        </script>
     </head>
-    <body class="DefBdy">
-        <div class="SkpMedGry1"><a href="#SkipAnchor3860"><img src="<%= serviceURI%>/com_sun_web_ui/images/other/dot.gif" alt="Jump to End of Masthead" border="0" height="1" width="1" /></a></div><div class="MstDiv">
-            <table class="MstTblBot" title="" border="0" cellpadding="0" cellspacing="0" width="100%">
-                <tr>
-                    <td class="MstTdTtl" width="99%">
-                        <div class="MstDivTtl"><img name="AMConfig.configurator.ProdName" src="<%= serviceURI%>/console/images/PrimaryProductName.png" alt="OpenAM" border="0" /></div>
-                    </td>
-                    <td class="MstTdLogo" width="1%"><img name="AMConfig.configurator.BrandLogo" src="<%= serviceURI%>/com_sun_web_ui/images/other/javalogo.gif" alt="Java(TM) Logo" border="0" height="55" width="31" /></td>
-                </tr>
-            </table>
-            <table class="MstTblEnd" border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td><img name="RMRealm.mhCommon.EndorserLogo" src="<%= serviceURI%>/com_sun_web_ui/images/masthead/masthead-sunname.gif" alt="ForgeRock AS" align="right" border="0" height="10" width="108" /></td></tr></table>
-        </div>
-        <table class="SkpMedGry1" border="0" cellpadding="5" cellspacing="0" width="100%"><tr><td><img src="<%= serviceURI%>/com_sun_web_ui/images/other/dot.gif" alt="Jump to End of Masthead" border="0" height="1" width="1" /></td></tr></table>
-        <table border="0" cellpadding="10" cellspacing="0" width="100%"><tr><td></td></tr></table>
-
-        <form name="form" action="<%= serviceURI%>/consent.jsp" method="POST">
-
-            <%
-                List<Attribute> attrs = ConsentHelper.getAttributes(request);
-                if (attrs == null || attrs.isEmpty()) {
-                    out.println("Do you want to share your account information with " + request.getAttribute("spEntityID"));
-                } else {
-                    out.println("Are you sure you want to share the following informations with " + request.getAttribute("spEntityID") + "?");
-                    out.println("<ul>");
-                    for (Attribute attr : attrs) {
-                        out.println("<li>" + attr.getName() + ":<ul>");
-                        for (Object val : attr.getAttributeValueString()) {
-                            out.println("<li>" + val + "</li>");
+    <body>
+        <div id="wrapper">
+            <div id="login-base" class="base-wrapper">
+                <div id="header">
+                    <div id="logo" class="float-left">
+                        <a href="" title="ForgeRock"><img src="<%= contextPath %>/XUI/images/logo.png" alt="ForgeRock" style="height: 80px" /></a>
+                    </div>
+                </div>
+                <div id="content" class="content">
+                    <div class="container-shadow" id="login-container">
+                        <form action="<%= contextPath %>/consent.jsp" method="POST" class="form small">
+                        <%
+                        List<Attribute> attrs = ConsentHelper.getAttributes(request);
+                        if (attrs == null || attrs.isEmpty()) {
+                        %>
+                            <h5>Do you want to share your account information with <%= request.getAttribute("spEntityID") %>?</h5>
+                        <%
+                        } else {
+                        %>
+                            <h5>Are you sure you want to share the following informations with <%= request.getAttribute("spEntityID") %>?</h5>
+                            <ul>
+                            <%
+                            for (Attribute attr : attrs) {
+                            %>
+                                <li><b><%= attr.getName() %></b>: <%= CollectionUtils.getFirstItem(attr.getAttributeValueString(), "") %></li>
+                                <%
+                            }
                         }
-                        out.println("</ul></li>");
-                    }
-                    out.println("</ul>");
-                }
-            %>
-            <input type="hidden" name="goto" value="${gotoURL}" />
-            <input type="hidden" name="spEntityID" value="${spEntityID}" />
-            <input type="submit" name="submit" value="Yes" />
-            <input type="submit" name="submit" value="No" />
-        </form>
+                            %>
+                            </ul>
+                            <fieldset>
+                                <div class="group-field-block float-right">
+                                    <input type="hidden" name="goto" value="${gotoURL}" />
+                                    <input type="hidden" name="spEntityID" value="${spEntityID}" />
+                                    <input name="submit" type="submit" class="button" index="0" value="Yes" />
+                                    <input name="submit" type="submit" class="button" index="0" value="No" />
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <div class="container center">
+                <p class="center">
+                    <a href="mailto: info@forgerock.com">info@forgerock.com</a>
+                    <br>
+                    Copyright © 2010-14 ForgeRock AS, all rights reserved.
+                </p>
+            </div>
+        </div>
     </body>
 </html>
