@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2014 ForgeRock AS.
+ * Copyright 2014-2016 ForgeRock AS.
  */
 package org.forgerock.openam.extensions.quotaexhaustionaction;
 
@@ -22,6 +22,7 @@ import com.iplanet.dpro.session.service.InternalSession;
 import com.iplanet.dpro.session.service.QuotaExhaustionAction;
 import com.sun.identity.shared.debug.Debug;
 import java.util.Map;
+import org.forgerock.openam.session.SessionCache;
 
 /**
  * This is a sample {@link QuotaExhaustionAction} implementation, which just randomly kills the first session it finds.
@@ -43,7 +44,7 @@ public class ExampleQuotaExhaustionAction implements QuotaExhaustionAction {
         for (Map.Entry<String, Long> entry : existingSessions.entrySet()) {
             try {
                 //getting an actual Session instance based on the session id
-                Session session = Session.getSession(new SessionID(entry.getKey()));
+                Session session = SessionCache.getInstance().getSession(new SessionID(entry.getKey()));
                 //we use the session to destroy itself.
                 session.destroySession(session);
                 //we only want to destroy one session, remember?
